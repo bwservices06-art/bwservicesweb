@@ -68,7 +68,7 @@ export default function Work() {
                                 fill
                                 className="object-cover transition-transform duration-700 group-hover:scale-110"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 p-8 flex flex-col justify-end translate-y-4 group-hover:translate-y-0">
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-100 transition-all duration-500 p-8 flex flex-col justify-end">
                                 <h3 className="text-2xl font-bold mb-2 text-white">{project.title}</h3>
                                 <p className="text-gray-300 mb-4 line-clamp-2">{project.description}</p>
                                 <div className="flex flex-wrap gap-2 mb-6">
