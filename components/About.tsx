@@ -14,22 +14,7 @@ interface Developer {
     image: string;
 }
 
-const initialDevelopers: Developer[] = [
-    {
-        id: "sham-patil",
-        name: "Sham Patil",
-        role: "Full Stack Developer",
-        bio: "Passionate developer with expertise in the MERN stack and Next.js. I love building scalable web applications and solving complex problems.",
-        image: "https://shampatil23.github.io/Sham-Patil/assets/ChatGPT%20Image%20Jul%2024,%202025,%2012_11_46%20AM.png"
-    },
-    {
-        id: "harsh-shinde",
-        name: "Harsh Shinde",
-        role: "UI/UX Designer & Developer",
-        bio: "Creative designer focused on crafting intuitive and beautiful user experiences. Specialized in modern web design trends and 3D interactions.",
-        image: "https://media.licdn.com/dms/image/v2/D5603AQFOAkS7WAx6sQ/profile-displayphoto-scale_200_200/B56Zkpi4nBJ4AY-/0/1757338636946?e=1766016000&v=beta&t=mTEFLuUGXHbI245Xskwd3_eaTUT6Gbjp3_NgU6Ufp-I"
-    }
-];
+const initialDevelopers: Developer[] = [];
 
 export default function About() {
     const [developers, setDevelopers] = useState<Developer[]>(initialDevelopers);
@@ -74,9 +59,10 @@ export default function About() {
                             key={dev.id}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
+                            whileHover={{ y: -10, scale: 1.02, rotateX: 2, rotateY: -2 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.2, duration: 0.6 }}
-                            className="glass-card p-8 rounded-2xl flex flex-col items-center text-center"
+                            className="glass-card p-8 rounded-2xl flex flex-col items-center text-center border border-white/5 hover:border-primary/30 shadow-lg hover:shadow-primary/10 transition-all duration-300"
                         >
                             <div className="relative w-32 h-32 mb-6 rounded-full overflow-hidden border-4 border-primary/20">
                                 <Image

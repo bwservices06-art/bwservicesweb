@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Mail, MapPin, Phone, Github, Linkedin, Twitter, Send } from "lucide-react";
+import { Mail, MapPin, Phone, Github, Linkedin, Twitter, Send, Youtube, Instagram, MessageCircle } from "lucide-react";
 import { db } from "@/lib/firebase";
-import { ref, push } from "firebase/database";
+import { ref, push, onValue } from "firebase/database";
 
 export default function Contact() {
     const [formData, setFormData] = useState({
@@ -15,6 +15,17 @@ export default function Contact() {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+
+    const [settings, setSettings] = useState<any>({});
+
+    useEffect(() => {
+        const settingsRef = ref(db, "settings");
+        onValue(settingsRef, (snapshot) => {
+            if (snapshot.exists()) {
+                setSettings(snapshot.val());
+            }
+        });
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -37,7 +48,27 @@ export default function Contact() {
     };
 
     return (
-        <footer id="contact" className="bg-surface pt-24 pb-12">
+        <footer id="contact" className="bg-surface pt-24 pb-12 relative overflow-hidden">
+            {/* Floating Background Elements */}
+            <motion.div
+                animate={{
+                    y: [0, -50, 0],
+                    rotate: 360,
+                    scale: [1, 1.2, 1]
+                }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -z-10"
+            />
+            <motion.div
+                animate={{
+                    y: [0, 50, 0],
+                    rotate: -360,
+                    scale: [1, 1.5, 1]
+                }}
+                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-3xl -z-10"
+            />
+
             <div className="container mx-auto px-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">
                     <motion.div
@@ -58,7 +89,7 @@ export default function Contact() {
                                 </div>
                                 <div>
                                     <p className="text-sm text-foreground/40">Email</p>
-                                    <p className="font-medium">hello@hirecoders.dev</p>
+                                    <p className="font-medium">{settings.contactEmail || "hello@hirecoders.dev"}</p>
                                 </div>
                             </div>
 
@@ -68,7 +99,7 @@ export default function Contact() {
                                 </div>
                                 <div>
                                     <p className="text-sm text-foreground/40">Phone</p>
-                                    <p className="font-medium">+1 (555) 123-4567</p>
+                                    <p className="font-medium">{settings.contactPhone || "+1 (555) 123-4567"}</p>
                                 </div>
                             </div>
 
@@ -78,7 +109,7 @@ export default function Contact() {
                                 </div>
                                 <div>
                                     <p className="text-sm text-foreground/40">Location</p>
-                                    <p className="font-medium">Pune, India</p>
+                                    <p className="font-medium">{settings.contactLocation || "Pune, India"}</p>
                                 </div>
                             </div>
                         </div>
@@ -158,9 +189,21 @@ export default function Contact() {
                         © 2024 HireCoders. All rights reserved.
                     </p>
                     <div className="flex items-center gap-6">
-                        <a href="#" className="text-foreground/40 hover:text-white transition-colors"><Github size={20} /></a>
-                        <a href="#" className="text-foreground/40 hover:text-white transition-colors"><Linkedin size={20} /></a>
-                        <a href="#" className="text-foreground/40 hover:text-white transition-colors"><Twitter size={20} /></a>
+                        {settings.socialYoutube && (
+                            <a href={settings.socialYoutube} target="_blank" className="text-foreground/40 hover:text-red-500 transition-colors"><Youtube size={20} /></a>
+                        )}
+                        {settings.socialInstagram && (
+                            <a href={settings.socialInstagram} target="_blank" className="text-foreground/40 hover:text-pink-500 transition-colors"><Instagram size={20} /></a>
+                        )}
+                        {settings.socialLinkedin && (
+                            <a href={settings.socialLinkedin} target="_blank" className="text-foreground/40 hover:text-blue-500 transition-colors"><Linkedin size={20} /></a>
+                        )}
+                        {settings.socialWhatsapp && (
+                            <a href={settings.socialWhatsapp} target="_blank" className="text-foreground/40 hover:text-green-500 transition-colors"><MessageCircle size={20} /></a>
+                        )}
+                        {settings.socialTelegram && (
+                            <a href={settings.socialTelegram} target="_blank" className="text-foreground/40 hover:text-blue-400 transition-colors"><Send size={20} /></a>
+                        )}
                     </div>
                 </div>
             </div>

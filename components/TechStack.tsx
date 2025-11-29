@@ -10,22 +10,22 @@ const technologies = [
 
 export default function TechStack() {
     return (
-        <section className="py-12 border-y border-white/5 bg-white/5 backdrop-blur-sm overflow-hidden">
+        <section className="py-12 border-y border-white/5 bg-white/5 backdrop-blur-sm overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
             <div className="flex">
                 <motion.div
                     initial={{ x: 0 }}
-                    animate={{ x: "-50%" }}
+                    animate={{ x: "-100%" }}
                     transition={{
-                        duration: 20,
+                        duration: 30,
                         repeat: Infinity,
                         ease: "linear",
                     }}
-                    className="flex gap-12 whitespace-nowrap px-6"
+                    className="flex flex-shrink-0 gap-8 md:gap-12 whitespace-nowrap px-6"
                 >
-                    {[...technologies, ...technologies].map((tech, index) => (
+                    {technologies.map((tech, index) => (
                         <span
                             key={index}
-                            className="text-2xl md:text-3xl font-bold text-foreground/20 uppercase tracking-widest hover:text-primary transition-colors cursor-default"
+                            className="text-xl md:text-3xl font-bold text-foreground/20 uppercase tracking-widest hover:text-primary transition-colors cursor-default"
                         >
                             {tech}
                         </span>
@@ -33,18 +33,18 @@ export default function TechStack() {
                 </motion.div>
                 <motion.div
                     initial={{ x: 0 }}
-                    animate={{ x: "-50%" }}
+                    animate={{ x: "-100%" }}
                     transition={{
-                        duration: 20,
+                        duration: 30,
                         repeat: Infinity,
                         ease: "linear",
                     }}
-                    className="flex gap-12 whitespace-nowrap px-6"
+                    className="flex flex-shrink-0 gap-8 md:gap-12 whitespace-nowrap px-6"
                 >
-                    {[...technologies, ...technologies].map((tech, index) => (
+                    {technologies.map((tech, index) => (
                         <span
                             key={`duplicate-${index}`}
-                            className="text-2xl md:text-3xl font-bold text-foreground/20 uppercase tracking-widest hover:text-primary transition-colors cursor-default"
+                            className="text-xl md:text-3xl font-bold text-foreground/20 uppercase tracking-widest hover:text-primary transition-colors cursor-default"
                         >
                             {tech}
                         </span>

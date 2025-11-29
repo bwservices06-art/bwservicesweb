@@ -64,6 +64,21 @@ export default function Services() {
         });
     }, []);
 
+    const container = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const item = {
+        hidden: { opacity: 0, y: 20 },
+        show: { opacity: 1, y: 0 }
+    };
+
     return (
         <section id="services" className="py-24 bg-surface/50">
             <div className="container mx-auto px-6">
@@ -80,19 +95,23 @@ export default function Services() {
                     </p>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <motion.div
+                    variants={container}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true }}
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                >
                     {services.map((service, index) => {
                         const Icon = iconMap[service.icon] || Code2;
                         return (
                             <motion.div
                                 key={service.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1, duration: 0.5 }}
-                                className="glass-card p-8 rounded-2xl hover:bg-white/5 transition-colors group"
+                                variants={item}
+                                whileHover={{ y: -10, scale: 1.02 }}
+                                className="glass-card p-8 rounded-2xl hover:bg-white/5 transition-colors group border border-white/5 hover:border-primary/30 shadow-lg hover:shadow-primary/10"
                             >
-                                <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
+                                <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform duration-300">
                                     <Icon size={32} />
                                 </div>
                                 <h3 className="text-xl font-bold mb-4">{service.title}</h3>
@@ -102,8 +121,9 @@ export default function Services() {
                             </motion.div>
                         );
                     })}
-                </div>
+                </motion.div>
             </div>
         </section>
     );
+
 }

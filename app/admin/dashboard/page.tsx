@@ -63,8 +63,13 @@ export default function AdminDashboard() {
             });
         });
 
-        onValue(ref(db, "settings/websiteName"), (snapshot) => {
-            if (snapshot.exists()) setWebsiteName(snapshot.val());
+        onValue(ref(db, "settings"), (snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                setWebsiteName(data.websiteName || "HireCoders");
+                // Pre-fill edit form with current settings
+                setEditForm((prev: any) => ({ ...prev, ...data }));
+            }
         });
 
         setLoading(false);
@@ -83,7 +88,17 @@ export default function AdminDashboard() {
 
     const handleSave = async (path: string) => {
         if (path === "settings") {
-            await set(ref(db, "settings/websiteName"), editForm.websiteName);
+            await update(ref(db, "settings"), {
+                websiteName: editForm.websiteName,
+                contactEmail: editForm.contactEmail,
+                contactPhone: editForm.contactPhone,
+                contactLocation: editForm.contactLocation,
+                socialYoutube: editForm.socialYoutube,
+                socialInstagram: editForm.socialInstagram,
+                socialLinkedin: editForm.socialLinkedin,
+                socialWhatsapp: editForm.socialWhatsapp,
+                socialTelegram: editForm.socialTelegram,
+            });
         } else if (isEditing) {
             await update(ref(db, `${path}/${isEditing}`), editForm);
             setIsEditing(null);
@@ -310,9 +325,86 @@ export default function AdminDashboard() {
                                         onChange={e => setEditForm({ ...editForm, websiteName: e.target.value })}
                                     />
                                 </div>
+
+                                <h4 className="text-lg font-bold mt-6 mb-4">Contact Information</h4>
+                                <div>
+                                    <label className="block text-sm font-medium mb-2 text-foreground/60">Contact Email</label>
+                                    <input
+                                        className="w-full bg-white/5 p-3 rounded-lg border border-white/10"
+                                        value={editForm.contactEmail ?? ""}
+                                        onChange={e => setEditForm({ ...editForm, contactEmail: e.target.value })}
+                                        placeholder="hello@example.com"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-2 text-foreground/60">Phone Number</label>
+                                    <input
+                                        className="w-full bg-white/5 p-3 rounded-lg border border-white/10"
+                                        value={editForm.contactPhone ?? ""}
+                                        onChange={e => setEditForm({ ...editForm, contactPhone: e.target.value })}
+                                        placeholder="+1 (555) 123-4567"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-2 text-foreground/60">Location</label>
+                                    <input
+                                        className="w-full bg-white/5 p-3 rounded-lg border border-white/10"
+                                        value={editForm.contactLocation ?? ""}
+                                        onChange={e => setEditForm({ ...editForm, contactLocation: e.target.value })}
+                                        placeholder="City, Country"
+                                    />
+                                </div>
+
+                                <h4 className="text-lg font-bold mt-6 mb-4">Social Links</h4>
+                                <div>
+                                    <label className="block text-sm font-medium mb-2 text-foreground/60">YouTube URL</label>
+                                    <input
+                                        className="w-full bg-white/5 p-3 rounded-lg border border-white/10"
+                                        value={editForm.socialYoutube ?? ""}
+                                        onChange={e => setEditForm({ ...editForm, socialYoutube: e.target.value })}
+                                        placeholder="https://youtube.com/..."
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-2 text-foreground/60">Instagram URL</label>
+                                    <input
+                                        className="w-full bg-white/5 p-3 rounded-lg border border-white/10"
+                                        value={editForm.socialInstagram ?? ""}
+                                        onChange={e => setEditForm({ ...editForm, socialInstagram: e.target.value })}
+                                        placeholder="https://instagram.com/..."
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-2 text-foreground/60">LinkedIn URL</label>
+                                    <input
+                                        className="w-full bg-white/5 p-3 rounded-lg border border-white/10"
+                                        value={editForm.socialLinkedin ?? ""}
+                                        onChange={e => setEditForm({ ...editForm, socialLinkedin: e.target.value })}
+                                        placeholder="https://linkedin.com/..."
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-2 text-foreground/60">WhatsApp Channel URL</label>
+                                    <input
+                                        className="w-full bg-white/5 p-3 rounded-lg border border-white/10"
+                                        value={editForm.socialWhatsapp ?? ""}
+                                        onChange={e => setEditForm({ ...editForm, socialWhatsapp: e.target.value })}
+                                        placeholder="https://whatsapp.com/channel/..."
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-2 text-foreground/60">Telegram URL</label>
+                                    <input
+                                        className="w-full bg-white/5 p-3 rounded-lg border border-white/10"
+                                        value={editForm.socialTelegram ?? ""}
+                                        onChange={e => setEditForm({ ...editForm, socialTelegram: e.target.value })}
+                                        placeholder="https://t.me/..."
+                                    />
+                                </div>
+
                                 <button
                                     onClick={() => handleSave("settings")}
-                                    className="w-full bg-primary py-3 rounded-lg font-bold hover:bg-blue-600"
+                                    className="w-full bg-primary py-3 rounded-lg font-bold hover:bg-blue-600 mt-6"
                                 >
                                     Save Settings
                                 </button>

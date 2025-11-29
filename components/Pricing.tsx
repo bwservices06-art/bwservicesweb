@@ -15,50 +15,7 @@ interface Plan {
     popular: boolean;
 }
 
-const initialPlans: Plan[] = [
-    {
-        id: "academic",
-        name: "Academic Assistance",
-        price: "₹5,000",
-        description: "Perfect for students needing help with projects and reports.",
-        features: [
-            "Final Year Project Guidance",
-            "Project Report Writing",
-            "Research Paper Assistance",
-            "Code Explanation & Documentation",
-            "24/7 Support",
-        ],
-        popular: false,
-    },
-    {
-        id: "business",
-        name: "Business Website",
-        price: "₹25,000",
-        description: "Professional presence for startups and small businesses.",
-        features: [
-            "Custom Responsive Design",
-            "5-7 Pages",
-            "SEO Optimization",
-            "Contact Form Integration",
-            "1 Month Free Maintenance",
-        ],
-        popular: true,
-    },
-    {
-        id: "custom-app",
-        name: "Custom Application",
-        price: "₹50,000+",
-        description: "Full-scale mobile or web application development.",
-        features: [
-            "Native Android/iOS App",
-            "Full Stack Web Application",
-            "Database Integration",
-            "Admin Dashboard",
-            "3 Months Free Support",
-        ],
-        popular: false,
-    },
-];
+const initialPlans: Plan[] = [];
 
 export default function Pricing() {
     const [plans, setPlans] = useState<Plan[]>(initialPlans);
@@ -160,8 +117,8 @@ export default function Pricing() {
                                 <button
                                     onClick={() => handleGetStarted(plan)}
                                     className={`w-full py-3 rounded-lg font-bold transition-all ${plan.popular
-                                            ? "bg-primary text-white hover:bg-blue-600 shadow-lg hover:shadow-primary/25"
-                                            : "bg-white/5 hover:bg-white/10 border border-white/10"
+                                        ? "bg-primary text-white hover:bg-blue-600 shadow-lg hover:shadow-primary/25"
+                                        : "bg-white/5 hover:bg-white/10 border border-white/10"
                                         }`}
                                 >
                                     Get Started

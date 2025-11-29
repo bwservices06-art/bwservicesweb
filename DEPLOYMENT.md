@@ -39,11 +39,22 @@ If you haven't already pushed your code to GitHub, do so now:
 3.  Import your GitHub repository (`portfolio-site`).
 4.  Vercel will automatically detect that it's a Next.js project.
 
-## Step 3: Configure Environment Variables (Optional but Recommended)
+## Step 3: Configure Build Settings (CRITICAL FIX)
+
+**You must do this to fix the "ERESOLVE overriding peer dependency" error:**
+
+1.  In the "Configure Project" screen, expand the **"Build and Output Settings"** section.
+2.  Toggle the **Override** switch for **Install Command**.
+3.  Enter the following command:
+    ```bash
+    npm install --legacy-peer-deps
+    ```
+
+## Step 4: Configure Environment Variables (Optional but Recommended)
 
 For better security, you should use Environment Variables instead of hardcoding Firebase keys in `lib/firebase.ts`.
 
-1.  In the Vercel deployment screen, expand the **"Environment Variables"** section.
+1.  Expand the **"Environment Variables"** section.
 2.  Add the following variables (copy values from your `lib/firebase.ts`):
     *   `NEXT_PUBLIC_FIREBASE_API_KEY`
     *   `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
@@ -53,9 +64,7 @@ For better security, you should use Environment Variables instead of hardcoding 
     *   `NEXT_PUBLIC_FIREBASE_APP_ID`
     *   `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID`
 
-    *Note: You will need to update your `lib/firebase.ts` to use `process.env.NEXT_PUBLIC_...` if you do this.*
-
-## Step 4: Deploy
+## Step 5: Deploy
 
 1.  Click **"Deploy"**.
 2.  Wait for the build to complete.

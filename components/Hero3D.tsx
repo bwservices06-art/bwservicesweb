@@ -125,21 +125,7 @@ export default function Hero3D() {
             </div>
 
             {/* Scroll Indicator */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.5, duration: 1 }}
-                className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 z-10"
-            >
-                <span className="text-xs uppercase tracking-widest">Scroll to Explore</span>
-                <div className="w-[1px] h-16 bg-gradient-to-b from-blue-500/50 to-transparent relative overflow-hidden">
-                    <motion.div
-                        animate={{ y: ["0%", "100%"] }}
-                        transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-                        className="absolute top-0 left-0 w-full h-1/2 bg-blue-400"
-                    />
-                </div>
-            </motion.div>
+
         </section>
     );
 }
