@@ -244,7 +244,7 @@ export default function AdminDashboard() {
                                     <h3 className="font-bold text-xl mb-2">{project.title}</h3>
                                     <p className="text-foreground/60 mb-2">{project.description}</p>
                                     <div className="flex gap-2 flex-wrap">
-                                        {project.tags.split(",").map((tag, i) => (
+                                        {project.tags?.split(",").map((tag, i) => (
                                             <span key={i} className="text-xs bg-white/10 px-2 py-1 rounded">{tag.trim()}</span>
                                         ))}
                                     </div>
@@ -283,7 +283,7 @@ export default function AdminDashboard() {
                                     <div className="text-2xl font-bold text-primary my-2">{plan.price}</div>
                                     <p className="text-sm text-foreground/60 mb-4">{plan.description}</p>
                                     <ul className="text-sm list-disc list-inside">
-                                        {plan.features.split(",").map((f, i) => <li key={i}>{f.trim()}</li>)}
+                                        {plan.features?.split(",").map((f, i) => <li key={i}>{f.trim()}</li>)}
                                     </ul>
                                 </div>
                             ))}

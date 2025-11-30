@@ -83,7 +83,7 @@ export default function Pricing() {
                     {plans.map((plan, index) => {
                         const featuresList = Array.isArray(plan.features)
                             ? plan.features
-                            : (plan.features as string).split(",");
+                            : (plan.features as string)?.split(",") || [];
 
                         return (
                             <motion.div
