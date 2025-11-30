@@ -72,7 +72,7 @@ export default function Work() {
                                 <h3 className="text-2xl font-bold mb-2 text-white">{project.title}</h3>
                                 <p className="text-gray-300 mb-4 line-clamp-2">{project.description}</p>
                                 <div className="flex flex-wrap gap-2 mb-6">
-                                    {project.tags.split(",").map((tag, i) => (
+                                    {project.tags?.split(",").map((tag, i) => (
                                         <span key={i} className="px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-medium backdrop-blur-sm border border-primary/10">
                                             {tag.trim()}
                                         </span>
