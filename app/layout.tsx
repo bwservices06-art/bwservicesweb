@@ -11,6 +11,9 @@ const plusJakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: "HireCoders | Creative Developer & Designer",
   description: "Portfolio of HireCoders, a creative agency specializing in building digital experiences that matter.",
+  verification: {
+    google: "y1kVlbMOfO8rtw4I2xb4YBa_kWTfvZl9F4bkXMy0aMY",
+  },
 };
 
 export default function RootLayout({
