@@ -53,12 +53,19 @@ export default function About() {
                             key={dev.id}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            whileHover={{ y: -10, scale: 1.02, rotateX: 2, rotateY: -2 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.2, duration: 0.6 }}
-                            className="glass-card p-8 rounded-2xl flex flex-col items-center text-center border border-white/5 hover:border-primary/30 shadow-lg hover:shadow-primary/10 transition-all duration-300 cursor-pointer"
-                            onClick={() => dev.linkedin && window.open(dev.linkedin, "_blank")}
+                            className="glass-card p-8 rounded-2xl flex flex-col items-center text-center border border-white/5 hover:border-primary/30 shadow-lg hover:shadow-primary/10 transition-all duration-300 cursor-pointer relative group"
                         >
+                            {dev.linkedin && (
+                                <a
+                                    href={dev.linkedin}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="absolute inset-0 z-20"
+                                    aria-label={`View ${dev.name}'s LinkedIn profile`}
+                                />
+                            )}
                             <div className="relative w-32 h-32 mb-6 rounded-full overflow-hidden border-4 border-primary/20 group-hover:border-primary transition-colors">
                                 <Image
                                     src={dev.image}

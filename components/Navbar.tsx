@@ -43,8 +43,11 @@ export default function Navbar() {
                 }`}
         >
             <div className="container mx-auto px-6 flex items-center justify-between">
-                <Link href="/" className="text-2xl font-bold tracking-tighter">
-                    {websiteName}
+                <Link href="/" className="flex items-center gap-2">
+                    <div className="relative w-10 h-10 rounded-lg overflow-hidden">
+                        <img src="/logo.png" alt={websiteName} className="object-cover w-full h-full" />
+                    </div>
+                    <span className="text-2xl font-bold tracking-tighter">{websiteName}</span>
                 </Link>
 
                 {/* Desktop Nav */}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import ScrollProgress from "@/components/ScrollProgress";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const plusJakarta = Plus_Jakarta_Sans({
@@ -9,10 +10,49 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "BW Services | Creative Developer & Designer",
-  description: "Portfolio of BW Services, a creative agency specializing in building digital experiences that matter.",
+  title: {
+    default: "BW Services | Premium Digital Agency",
+    template: "%s | BW Services"
+  },
+  description: "BW Services is a premium creative agency specializing in 3D web experiences, robust applications, and strategic digital growth.",
+  keywords: ["Web Development", "3D Design", "Digital Agency", "Next.js", "React", "Creative Studio"],
+  authors: [{ name: "BW Services" }],
+  creator: "BW Services",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://bwservices.dev",
+    title: "BW Services | Premium Digital Agency",
+    description: "Transforming ideas into digital reality with cutting-edge 3D web experiences.",
+    siteName: "BW Services",
+    images: [
+      {
+        url: "/logo.png",
+        width: 800,
+        height: 600,
+        alt: "BW Services Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "BW Services | Premium Digital Agency",
+    description: "Transforming ideas into digital reality with cutting-edge 3D web experiences.",
+    images: ["/logo.png"],
+  },
   verification: {
     google: "y1kVlbMOfO8rtw4I2xb4YBa_kWTfvZl9F4bkXMy0aMY",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 
@@ -27,6 +67,7 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${inter.variable} ${plusJakarta.variable} font-sans bg-background text-foreground antialiased`}
       >
+        <ScrollProgress />
         {children}
       </body>
     </html>

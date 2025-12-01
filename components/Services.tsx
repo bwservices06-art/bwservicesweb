@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { Tilt } from "react-tilt";
 import { Code2, Smartphone, GraduationCap, FileText, BookOpen, Layout, Server, Database } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { ref, onValue } from "firebase/database";
@@ -108,16 +109,18 @@ export default function Services() {
                             <motion.div
                                 key={service.id}
                                 variants={item}
-                                whileHover={{ y: -10, scale: 1.02 }}
-                                className="glass-card p-8 rounded-2xl hover:bg-white/5 transition-colors group border border-white/5 hover:border-primary/30 shadow-lg hover:shadow-primary/10"
                             >
-                                <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform duration-300">
-                                    <Icon size={32} />
-                                </div>
-                                <h3 className="text-xl font-bold mb-4">{service.title}</h3>
-                                <p className="text-foreground/60 leading-relaxed">
-                                    {service.description}
-                                </p>
+                                <Tilt className="h-full" options={{ max: 25, scale: 1.05, speed: 400, glare: true, "max-glare": 0.5 }}>
+                                    <div className="glass-card p-8 rounded-2xl hover:bg-white/5 transition-colors group border border-white/5 hover:border-primary/30 shadow-lg hover:shadow-primary/10 h-full flex flex-col">
+                                        <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform duration-300">
+                                            <Icon size={32} />
+                                        </div>
+                                        <h3 className="text-xl font-bold mb-4">{service.title}</h3>
+                                        <p className="text-foreground/60 leading-relaxed flex-grow">
+                                            {service.description}
+                                        </p>
+                                    </div>
+                                </Tilt>
                             </motion.div>
                         );
                     })}
