@@ -59,7 +59,7 @@ export default function About() {
                         >
                             {dev.linkedin && (
                                 <a
-                                    href={dev.linkedin}
+                                    href={dev.linkedin.startsWith('http') ? dev.linkedin : `https://${dev.linkedin}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="absolute inset-0 z-20"

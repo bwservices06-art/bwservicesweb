@@ -78,6 +78,12 @@ export default function AdminDashboard() {
             }
         });
 
+        onValue(ref(db, "hero"), (snapshot) => {
+            if (snapshot.exists()) {
+                setEditForm((prev: any) => ({ ...prev, ...snapshot.val() }));
+            }
+        });
+
         setLoading(false);
     };
 
@@ -105,6 +111,8 @@ export default function AdminDashboard() {
                 socialWhatsapp: editForm.socialWhatsapp,
                 socialTelegram: editForm.socialTelegram,
             });
+        } else if (path === "hero") {
+            await update(ref(db, "hero"), editForm);
         } else if (isEditing) {
             await update(ref(db, `${path}/${isEditing}`), editForm);
             setIsEditing(null);
@@ -145,6 +153,7 @@ export default function AdminDashboard() {
                         { id: "developers", icon: Users, label: "Developers" },
                         { id: "faqs", icon: HelpCircle, label: "FAQs" },
                         { id: "process", icon: GitBranch, label: "Process" },
+                        { id: "hero", icon: LayoutGrid, label: "Hero Section" },
                         { id: "settings", icon: Settings, label: "Settings" },
                     ].map((tab) => (
                         <button
@@ -351,6 +360,103 @@ export default function AdminDashboard() {
                                     <p className="text-xs text-primary bg-primary/10 px-2 py-1 rounded inline-block">{step.icon}</p>
                                 </div>
                             ))}
+                        </div>
+                    )}
+
+                    {/* Hero Tab */}
+                    {activeTab === "hero" && (
+                        <div className="glass-card p-8 rounded-xl max-w-lg">
+                            <h3 className="text-xl font-bold mb-6">Edit Hero Section</h3>
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium mb-2 text-foreground/60">Badge Text</label>
+                                    <input
+                                        className="w-full bg-white/5 p-3 rounded-lg border border-white/10"
+                                        value={editForm.badge ?? ""}
+                                        onChange={e => setEditForm({ ...editForm, badge: e.target.value })}
+                                        placeholder="🚀 Transforming Ideas..."
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-2 text-foreground/60">Title Line 1</label>
+                                    <input
+                                        className="w-full bg-white/5 p-3 rounded-lg border border-white/10"
+                                        value={editForm.title1 ?? ""}
+                                        onChange={e => setEditForm({ ...editForm, title1: e.target.value })}
+                                        placeholder="We Build"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-2 text-foreground/60">Title Line 2 (Gradient)</label>
+                                    <input
+                                        className="w-full bg-white/5 p-3 rounded-lg border border-white/10"
+                                        value={editForm.title2 ?? ""}
+                                        onChange={e => setEditForm({ ...editForm, title2: e.target.value })}
+                                        placeholder="Future-Ready"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-2 text-foreground/60">Title Line 3</label>
+                                    <input
+                                        className="w-full bg-white/5 p-3 rounded-lg border border-white/10"
+                                        value={editForm.title3 ?? ""}
+                                        onChange={e => setEditForm({ ...editForm, title3: e.target.value })}
+                                        placeholder="Experiences."
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-2 text-foreground/60">Subtitle</label>
+                                    <textarea
+                                        className="w-full bg-white/5 p-3 rounded-lg border border-white/10"
+                                        value={editForm.subtitle ?? ""}
+                                        onChange={e => setEditForm({ ...editForm, subtitle: e.target.value })}
+                                        placeholder="Description..."
+                                    />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium mb-2 text-foreground/60">Button 1 Text</label>
+                                        <input
+                                            className="w-full bg-white/5 p-3 rounded-lg border border-white/10"
+                                            value={editForm.btn1Text ?? ""}
+                                            onChange={e => setEditForm({ ...editForm, btn1Text: e.target.value })}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium mb-2 text-foreground/60">Button 1 Link</label>
+                                        <input
+                                            className="w-full bg-white/5 p-3 rounded-lg border border-white/10"
+                                            value={editForm.btn1Link ?? ""}
+                                            onChange={e => setEditForm({ ...editForm, btn1Link: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium mb-2 text-foreground/60">Button 2 Text</label>
+                                        <input
+                                            className="w-full bg-white/5 p-3 rounded-lg border border-white/10"
+                                            value={editForm.btn2Text ?? ""}
+                                            onChange={e => setEditForm({ ...editForm, btn2Text: e.target.value })}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium mb-2 text-foreground/60">Button 2 Link</label>
+                                        <input
+                                            className="w-full bg-white/5 p-3 rounded-lg border border-white/10"
+                                            value={editForm.btn2Link ?? ""}
+                                            onChange={e => setEditForm({ ...editForm, btn2Link: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+
+                                <button
+                                    onClick={() => handleSave("hero")}
+                                    className="w-full bg-primary py-3 rounded-lg font-bold hover:bg-blue-600 mt-6"
+                                >
+                                    Save Hero Section
+                                </button>
+                            </div>
                         </div>
                     )}
 

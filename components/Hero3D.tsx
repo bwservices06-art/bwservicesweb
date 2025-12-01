@@ -5,9 +5,11 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Scene from "./Scene";
 import { Float, Stars, Sparkles, PerspectiveCamera, Text3D, Center, useMatcapTexture, Wireframe } from "@react-three/drei";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { db } from "@/lib/firebase";
+import { ref, onValue } from "firebase/database";
 
 function DigitalGrid() {
     const gridRef = useRef<THREE.Group>(null);
@@ -72,6 +74,27 @@ function FloatingCode() {
 }
 
 export default function Hero3D() {
+    const [heroData, setHeroData] = useState({
+        badge: "🚀 Transforming Ideas into Digital Reality",
+        title1: "We Build",
+        title2: "Future-Ready",
+        title3: "Experiences.",
+        subtitle: "BW Services is a premium creative agency specializing in 3D web experiences, robust applications, and strategic digital growth.",
+        btn1Text: "Start a Project",
+        btn1Link: "#contact",
+        btn2Text: "View Our Work",
+        btn2Link: "#work"
+    });
+
+    useEffect(() => {
+        const heroRef = ref(db, "hero");
+        onValue(heroRef, (snapshot) => {
+            if (snapshot.exists()) {
+                setHeroData(prev => ({ ...prev, ...snapshot.val() }));
+            }
+        });
+    }, []);
+
     return (
         <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-black">
             {/* 3D Background */}
@@ -110,38 +133,38 @@ export default function Hero3D() {
                         transition={{ delay: 0.2, duration: 0.5 }}
                         className="inline-block px-6 py-2 rounded-full border border-white/10 bg-white/5 text-sm font-medium text-primary mb-8 backdrop-blur-md shadow-[0_0_20px_rgba(59,130,246,0.2)]"
                     >
-                        🚀 Transforming Ideas into Digital Reality
+                        {heroData.badge}
                     </motion.span>
 
                     <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-8 drop-shadow-2xl">
-                        We Build <br />
+                        {heroData.title1} <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 animate-gradient-x">
-                            Future-Ready
+                            {heroData.title2}
                         </span> <br />
-                        Experiences.
+                        {heroData.title3}
                     </h1>
 
                     <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-12 leading-relaxed drop-shadow-md">
-                        BW Services is a premium creative agency specializing in 3D web experiences, robust applications, and strategic digital growth.
+                        {heroData.subtitle}
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                         <Link
-                            href="#contact"
+                            href={heroData.btn1Link}
                             className="group relative px-8 py-4 rounded-full bg-white text-black font-bold text-lg hover:bg-gray-100 transition-all flex items-center gap-2 overflow-hidden"
                         >
                             <span className="relative z-10 flex items-center gap-2">
-                                Start a Project
+                                {heroData.btn1Text}
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </span>
                             <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 opacity-0 group-hover:opacity-20 transition-opacity" />
                         </Link>
 
                         <Link
-                            href="#work"
+                            href={heroData.btn2Link}
                             className="px-8 py-4 rounded-full border border-white/10 bg-white/5 text-white font-semibold text-lg hover:bg-white/10 transition-colors backdrop-blur-sm hover:border-white/20"
                         >
-                            View Our Work
+                            {heroData.btn2Text}
                         </Link>
                     </div>
                 </motion.div>
