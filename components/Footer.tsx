@@ -41,9 +41,7 @@ export default function Footer() {
                 </div>
 
                 <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-                    <p className="text-sm text-foreground/40">
-                        © {new Date().getFullYear()} BW Services. All rights reserved.
-                    </p>
+                    <div />
                     <div className="flex items-center gap-6 text-foreground/60">
                         <a href="#" className="hover:text-primary transition-colors"><Github size={20} /></a>
                         <a href="#" className="hover:text-primary transition-colors"><Linkedin size={20} /></a>
