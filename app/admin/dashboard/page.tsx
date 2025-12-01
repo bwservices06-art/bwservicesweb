@@ -6,7 +6,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { ref, onValue, push, remove, update, set } from "firebase/database";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { LogOut, Mail, Plus, Trash2, Edit2, X, LayoutGrid, Briefcase, MessageSquare, Tag, Users, Settings, ShoppingCart } from "lucide-react";
+import { LogOut, Mail, Plus, Trash2, Edit2, X, LayoutGrid, Briefcase, MessageSquare, Tag, Users, Settings, ShoppingCart, HelpCircle, GitBranch } from "lucide-react";
 
 // Types
 interface Inquiry { id: string; name: string; email: string; subject: string; message: string; timestamp: number; }
@@ -14,8 +14,10 @@ interface Service { id: string; title: string; description: string; icon: string
 interface Project { id: string; title: string; description: string; image: string; link: string; tags: string; }
 interface Testimonial { id: string; name: string; role: string; content: string; rating: number; }
 interface Plan { id: string; name: string; price: string; description: string; features: string; popular: boolean; }
-interface Developer { id: string; name: string; role: string; bio: string; image: string; }
+interface Developer { id: string; name: string; role: string; bio: string; image: string; linkedin?: string; }
 interface Order { id: string; name: string; email: string; phone: string; plan: string; message: string; timestamp: number; }
+interface FAQ { id: string; question: string; answer: string; }
+interface ProcessStep { id: string; title: string; description: string; icon: string; }
 
 export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState("inquiries");
@@ -30,7 +32,9 @@ export default function AdminDashboard() {
     const [plans, setPlans] = useState<Plan[]>([]);
     const [developers, setDevelopers] = useState<Developer[]>([]);
     const [orders, setOrders] = useState<Order[]>([]);
-    const [websiteName, setWebsiteName] = useState("HireCoders");
+    const [faqs, setFaqs] = useState<FAQ[]>([]);
+    const [process, setProcess] = useState<ProcessStep[]>([]);
+    const [websiteName, setWebsiteName] = useState("BW Services");
 
     // Form States
     const [isEditing, setIsEditing] = useState<string | null>(null);
@@ -54,6 +58,8 @@ export default function AdminDashboard() {
             { key: "pricing", setter: setPlans },
             { key: "developers", setter: setDevelopers },
             { key: "orders", setter: setOrders },
+            { key: "faqs", setter: setFaqs },
+            { key: "process", setter: setProcess },
         ];
 
         refs.forEach(({ key, setter }) => {
@@ -66,7 +72,7 @@ export default function AdminDashboard() {
         onValue(ref(db, "settings"), (snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.val();
-                setWebsiteName(data.websiteName || "HireCoders");
+                setWebsiteName(data.websiteName || "BW Services");
                 // Pre-fill edit form with current settings
                 setEditForm((prev: any) => ({ ...prev, ...data }));
             }
@@ -137,6 +143,8 @@ export default function AdminDashboard() {
                         { id: "testimonials", icon: MessageSquare, label: "Testimonials" },
                         { id: "pricing", icon: Tag, label: "Pricing" },
                         { id: "developers", icon: Users, label: "Developers" },
+                        { id: "faqs", icon: HelpCircle, label: "FAQs" },
+                        { id: "process", icon: GitBranch, label: "Process" },
                         { id: "settings", icon: Settings, label: "Settings" },
                     ].map((tab) => (
                         <button
@@ -310,6 +318,40 @@ export default function AdminDashboard() {
                                 </div>
                             ))}
                         </div>
+
+                    )}
+
+                    {/* FAQs Tab */}
+                    {activeTab === "faqs" && (
+                        <div className="grid gap-4">
+                            {faqs.map((faq) => (
+                                <div key={faq.id} className="glass-card p-6 rounded-xl relative group">
+                                    <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button onClick={() => openEdit(faq)} className="p-2 bg-blue-500/20 text-blue-500 rounded-lg"><Edit2 size={16} /></button>
+                                        <button onClick={() => handleDelete("faqs", faq.id)} className="p-2 bg-red-500/20 text-red-500 rounded-lg"><Trash2 size={16} /></button>
+                                    </div>
+                                    <h3 className="font-bold text-lg mb-2">{faq.question}</h3>
+                                    <p className="text-foreground/60">{faq.answer}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Process Tab */}
+                    {activeTab === "process" && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {process.map((step) => (
+                                <div key={step.id} className="glass-card p-6 rounded-xl relative group">
+                                    <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button onClick={() => openEdit(step)} className="p-2 bg-blue-500/20 text-blue-500 rounded-lg"><Edit2 size={16} /></button>
+                                        <button onClick={() => handleDelete("process", step.id)} className="p-2 bg-red-500/20 text-red-500 rounded-lg"><Trash2 size={16} /></button>
+                                    </div>
+                                    <h3 className="font-bold text-xl mb-2">{step.title}</h3>
+                                    <p className="text-foreground/60 mb-2">{step.description}</p>
+                                    <p className="text-xs text-primary bg-primary/10 px-2 py-1 rounded inline-block">{step.icon}</p>
+                                </div>
+                            ))}
+                        </div>
                     )}
 
                     {/* Settings Tab */}
@@ -412,70 +454,86 @@ export default function AdminDashboard() {
                         </div>
                     )}
                 </div>
-            </main>
+            </main >
 
             {/* Edit/Add Modal */}
             <AnimatePresence>
-                {(isEditing || isAdding) && activeTab !== "settings" && (
-                    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-                        <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-surface border border-white/10 p-8 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-                            <div className="flex justify-between items-center mb-6">
-                                <h3 className="text-2xl font-bold">{isAdding ? "Add New" : "Edit Item"}</h3>
-                                <button onClick={() => { setIsEditing(null); setIsAdding(false); }}><X /></button>
-                            </div>
+                {
+                    (isEditing || isAdding) && activeTab !== "settings" && (
+                        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+                            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-surface border border-white/10 p-8 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+                                <div className="flex justify-between items-center mb-6">
+                                    <h3 className="text-2xl font-bold">{isAdding ? "Add New" : "Edit Item"}</h3>
+                                    <button onClick={() => { setIsEditing(null); setIsAdding(false); }}><X /></button>
+                                </div>
 
-                            <div className="space-y-4">
-                                {activeTab === "services" && (
-                                    <>
-                                        <input placeholder="Title" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.title || ""} onChange={e => setEditForm({ ...editForm, title: e.target.value })} />
-                                        <textarea placeholder="Description" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.description || ""} onChange={e => setEditForm({ ...editForm, description: e.target.value })} />
-                                        <input placeholder="Icon Name (Lucide)" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.icon || ""} onChange={e => setEditForm({ ...editForm, icon: e.target.value })} />
-                                    </>
-                                )}
-                                {activeTab === "projects" && (
-                                    <>
-                                        <input placeholder="Title" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.title || ""} onChange={e => setEditForm({ ...editForm, title: e.target.value })} />
-                                        <textarea placeholder="Description" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.description || ""} onChange={e => setEditForm({ ...editForm, description: e.target.value })} />
-                                        <input placeholder="Image URL" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.image || ""} onChange={e => setEditForm({ ...editForm, image: e.target.value })} />
-                                        <input placeholder="Project Link" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.link || ""} onChange={e => setEditForm({ ...editForm, link: e.target.value })} />
-                                        <input placeholder="Tags (comma separated)" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.tags || ""} onChange={e => setEditForm({ ...editForm, tags: e.target.value })} />
-                                    </>
-                                )}
-                                {activeTab === "testimonials" && (
-                                    <>
-                                        <input placeholder="Name" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.name || ""} onChange={e => setEditForm({ ...editForm, name: e.target.value })} />
-                                        <input placeholder="Role" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.role || ""} onChange={e => setEditForm({ ...editForm, role: e.target.value })} />
-                                        <textarea placeholder="Content" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.content || ""} onChange={e => setEditForm({ ...editForm, content: e.target.value })} />
-                                        <input type="number" placeholder="Rating (1-5)" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.rating || ""} onChange={e => setEditForm({ ...editForm, rating: Number(e.target.value) })} />
-                                    </>
-                                )}
-                                {activeTab === "pricing" && (
-                                    <>
-                                        <input placeholder="Plan Name" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.name || ""} onChange={e => setEditForm({ ...editForm, name: e.target.value })} />
-                                        <input placeholder="Price" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.price || ""} onChange={e => setEditForm({ ...editForm, price: e.target.value })} />
-                                        <textarea placeholder="Description" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.description || ""} onChange={e => setEditForm({ ...editForm, description: e.target.value })} />
-                                        <textarea placeholder="Features (comma separated)" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.features || ""} onChange={e => setEditForm({ ...editForm, features: e.target.value })} />
-                                        <label className="flex items-center gap-2">
-                                            <input type="checkbox" checked={editForm.popular || false} onChange={e => setEditForm({ ...editForm, popular: e.target.checked })} />
-                                            Most Popular
-                                        </label>
-                                    </>
-                                )}
-                                {activeTab === "developers" && (
-                                    <>
-                                        <input placeholder="Name" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.name || ""} onChange={e => setEditForm({ ...editForm, name: e.target.value })} />
-                                        <input placeholder="Role" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.role || ""} onChange={e => setEditForm({ ...editForm, role: e.target.value })} />
-                                        <textarea placeholder="Bio" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.bio || ""} onChange={e => setEditForm({ ...editForm, bio: e.target.value })} />
-                                        <input placeholder="Image URL" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.image || ""} onChange={e => setEditForm({ ...editForm, image: e.target.value })} />
-                                    </>
-                                )}
+                                <div className="space-y-4">
+                                    {activeTab === "services" && (
+                                        <>
+                                            <input placeholder="Title" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.title || ""} onChange={e => setEditForm({ ...editForm, title: e.target.value })} />
+                                            <textarea placeholder="Description" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.description || ""} onChange={e => setEditForm({ ...editForm, description: e.target.value })} />
+                                            <input placeholder="Icon Name (Lucide)" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.icon || ""} onChange={e => setEditForm({ ...editForm, icon: e.target.value })} />
+                                        </>
+                                    )}
+                                    {activeTab === "projects" && (
+                                        <>
+                                            <input placeholder="Title" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.title || ""} onChange={e => setEditForm({ ...editForm, title: e.target.value })} />
+                                            <textarea placeholder="Description" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.description || ""} onChange={e => setEditForm({ ...editForm, description: e.target.value })} />
+                                            <input placeholder="Image URL" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.image || ""} onChange={e => setEditForm({ ...editForm, image: e.target.value })} />
+                                            <input placeholder="Project Link" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.link || ""} onChange={e => setEditForm({ ...editForm, link: e.target.value })} />
+                                            <input placeholder="Tags (comma separated)" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.tags || ""} onChange={e => setEditForm({ ...editForm, tags: e.target.value })} />
+                                        </>
+                                    )}
+                                    {activeTab === "testimonials" && (
+                                        <>
+                                            <input placeholder="Name" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.name || ""} onChange={e => setEditForm({ ...editForm, name: e.target.value })} />
+                                            <input placeholder="Role" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.role || ""} onChange={e => setEditForm({ ...editForm, role: e.target.value })} />
+                                            <textarea placeholder="Content" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.content || ""} onChange={e => setEditForm({ ...editForm, content: e.target.value })} />
+                                            <input type="number" placeholder="Rating (1-5)" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.rating || ""} onChange={e => setEditForm({ ...editForm, rating: Number(e.target.value) })} />
+                                        </>
+                                    )}
+                                    {activeTab === "pricing" && (
+                                        <>
+                                            <input placeholder="Plan Name" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.name || ""} onChange={e => setEditForm({ ...editForm, name: e.target.value })} />
+                                            <input placeholder="Price" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.price || ""} onChange={e => setEditForm({ ...editForm, price: e.target.value })} />
+                                            <textarea placeholder="Description" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.description || ""} onChange={e => setEditForm({ ...editForm, description: e.target.value })} />
+                                            <textarea placeholder="Features (comma separated)" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.features || ""} onChange={e => setEditForm({ ...editForm, features: e.target.value })} />
+                                            <label className="flex items-center gap-2">
+                                                <input type="checkbox" checked={editForm.popular || false} onChange={e => setEditForm({ ...editForm, popular: e.target.checked })} />
+                                                Most Popular
+                                            </label>
+                                        </>
+                                    )}
+                                    {activeTab === "developers" && (
+                                        <>
+                                            <input placeholder="Name" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.name || ""} onChange={e => setEditForm({ ...editForm, name: e.target.value })} />
+                                            <input placeholder="Role" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.role || ""} onChange={e => setEditForm({ ...editForm, role: e.target.value })} />
+                                            <textarea placeholder="Bio" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.bio || ""} onChange={e => setEditForm({ ...editForm, bio: e.target.value })} />
+                                            <input placeholder="Image URL" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.image || ""} onChange={e => setEditForm({ ...editForm, image: e.target.value })} />
+                                            <input placeholder="LinkedIn URL" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.linkedin || ""} onChange={e => setEditForm({ ...editForm, linkedin: e.target.value })} />
+                                        </>
+                                    )}
+                                    {activeTab === "faqs" && (
+                                        <>
+                                            <input placeholder="Question" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.question || ""} onChange={e => setEditForm({ ...editForm, question: e.target.value })} />
+                                            <textarea placeholder="Answer" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.answer || ""} onChange={e => setEditForm({ ...editForm, answer: e.target.value })} />
+                                        </>
+                                    )}
+                                    {activeTab === "process" && (
+                                        <>
+                                            <input placeholder="Title" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.title || ""} onChange={e => setEditForm({ ...editForm, title: e.target.value })} />
+                                            <textarea placeholder="Description" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.description || ""} onChange={e => setEditForm({ ...editForm, description: e.target.value })} />
+                                            <input placeholder="Icon Name (Lucide)" className="w-full bg-white/5 p-3 rounded-lg" value={editForm.icon || ""} onChange={e => setEditForm({ ...editForm, icon: e.target.value })} />
+                                        </>
+                                    )}
 
-                                <button onClick={() => handleSave(activeTab)} className="w-full bg-primary py-3 rounded-lg font-bold hover:bg-blue-600">Save Changes</button>
-                            </div>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
-        </div>
+                                    <button onClick={() => handleSave(activeTab)} className="w-full bg-primary py-3 rounded-lg font-bold hover:bg-blue-600">Save Changes</button>
+                                </div>
+                            </motion.div>
+                        </div>
+                    )
+                }
+            </AnimatePresence >
+        </div >
     );
 }

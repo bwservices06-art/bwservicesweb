@@ -19,7 +19,7 @@ const initialTestimonials: Testimonial[] = [
         id: "rahul-sharma",
         name: "Rahul Sharma",
         role: "Founder, TechSolutions India",
-        content: "HireCoders delivered our e-commerce platform well within the deadline. The UI is smooth and the backend is robust. Highly recommended!",
+        content: "BW Services delivered our e-commerce platform well within the deadline. The UI is smooth and the backend is robust. Highly recommended!",
         rating: 5,
     },
     {

@@ -12,6 +12,7 @@ interface Developer {
     role: string;
     bio: string;
     image: string;
+    linkedin?: string;
 }
 
 const initialDevelopers: Developer[] = [];
@@ -24,15 +25,8 @@ export default function About() {
         onValue(developersRef, (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                // Create a map of existing developers for easy lookup/replacement
-                const devMap = new Map(initialDevelopers.map(d => [d.id, d]));
-
-                // Update or add new developers from Firebase
-                Object.entries(data).forEach(([k, v]: [string, any]) => {
-                    devMap.set(k, { id: k, ...v });
-                });
-
-                setDevelopers(Array.from(devMap.values()));
+                const fetchedDevelopers = Object.entries(data).map(([k, v]: [string, any]) => ({ id: k, ...v }));
+                setDevelopers(fetchedDevelopers);
             }
         });
     }, []);
@@ -62,9 +56,10 @@ export default function About() {
                             whileHover={{ y: -10, scale: 1.02, rotateX: 2, rotateY: -2 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.2, duration: 0.6 }}
-                            className="glass-card p-8 rounded-2xl flex flex-col items-center text-center border border-white/5 hover:border-primary/30 shadow-lg hover:shadow-primary/10 transition-all duration-300"
+                            className="glass-card p-8 rounded-2xl flex flex-col items-center text-center border border-white/5 hover:border-primary/30 shadow-lg hover:shadow-primary/10 transition-all duration-300 cursor-pointer"
+                            onClick={() => dev.linkedin && window.open(dev.linkedin, "_blank")}
                         >
-                            <div className="relative w-32 h-32 mb-6 rounded-full overflow-hidden border-4 border-primary/20">
+                            <div className="relative w-32 h-32 mb-6 rounded-full overflow-hidden border-4 border-primary/20 group-hover:border-primary transition-colors">
                                 <Image
                                     src={dev.image}
                                     alt={dev.name}

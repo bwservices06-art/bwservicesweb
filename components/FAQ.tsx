@@ -1,34 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
 
-const faqs = [
-    {
-        question: "What services do you offer?",
-        answer: "We offer a full range of digital services including Custom Web Development, Mobile App Development (iOS & Android), UI/UX Design, SEO Optimization, and Technical Consulting.",
-    },
-    {
-        question: "How much does a typical project cost?",
-        answer: "Project costs vary depending on complexity, scope, and timeline. We offer custom quotes after a detailed discovery session. Contact us for a free consultation.",
-    },
-    {
-        question: "How long does it take to build a website?",
-        answer: "A standard brochure website typically takes 2-4 weeks, while complex web applications can take 8-12 weeks or more. We provide a detailed timeline during the proposal phase.",
-    },
-    {
-        question: "Do you provide maintenance and support?",
-        answer: "Yes, we offer ongoing maintenance packages to ensure your website remains secure, up-to-date, and performing optimally after launch.",
-    },
-    {
-        question: "Can you help with college projects or research papers?",
-        answer: "Absolutely! We have a dedicated team for academic assistance, helping students with final year projects, thesis writing, and research paper publication.",
-    },
-];
+import { db } from "@/lib/firebase";
+import { ref, onValue } from "firebase/database";
+
+interface FAQItem {
+    id: string;
+    question: string;
+    answer: string;
+}
 
 export default function FAQ() {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
+    const [faqs, setFaqs] = useState<FAQItem[]>([]);
+
+    useEffect(() => {
+        const faqsRef = ref(db, "faqs");
+        onValue(faqsRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                const fetchedFaqs = Object.entries(data).map(([k, v]: [string, any]) => ({ id: k, ...v }));
+                setFaqs(fetchedFaqs);
+            }
+        });
+    }, []);
 
     return (
         <section className="py-24 relative">

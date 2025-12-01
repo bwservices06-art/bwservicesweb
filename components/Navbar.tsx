@@ -18,7 +18,7 @@ const navLinks = [
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [websiteName, setWebsiteName] = useState("HireCoders");
+    const [websiteName, setWebsiteName] = useState("BW Services");
 
     useEffect(() => {
         const handleScroll = () => {

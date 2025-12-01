@@ -3,14 +3,13 @@ import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyArdZ0hNmy1gqNULPCJQbbGml2KXMGYU4Q",
-    authDomain: "services-website-8f801.firebaseapp.com",
-    databaseURL: "https://services-website-8f801-default-rtdb.firebaseio.com",
-    projectId: "services-website-8f801",
-    storageBucket: "services-website-8f801.firebasestorage.app",
-    messagingSenderId: "358116867362",
-    appId: "1:358116867362:web:cde270ec40855859cf797b",
-    measurementId: "G-5SJ7MEYVNW"
+    apiKey: "AIzaSyASi4OTWMi523hdCJC9Cv1kssh00T0FQSI",
+    authDomain: "bw-services-d32d2.firebaseapp.com",
+    projectId: "bw-services-d32d2",
+    storageBucket: "bw-services-d32d2.firebasestorage.app",
+    messagingSenderId: "1048638410252",
+    appId: "1:1048638410252:web:64d7db6aff812ceccd6829",
+    measurementId: "G-9GTHWEFL6S"
 };
 
 // Initialize Firebase

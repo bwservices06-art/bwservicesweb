@@ -89,7 +89,7 @@ export default function Contact() {
                                 </div>
                                 <div>
                                     <p className="text-sm text-foreground/40">Email</p>
-                                    <p className="font-medium">{settings.contactEmail || "hello@hirecoders.dev"}</p>
+                                    <p className="font-medium">{settings.contactEmail || "hello@bwservices.dev"}</p>
                                 </div>
                             </div>
 
@@ -186,7 +186,7 @@ export default function Contact() {
 
                 <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
                     <p className="text-foreground/40 text-sm">
-                        © 2024 HireCoders. All rights reserved.
+                        © 2024 BW Services. All rights reserved.
                     </p>
                     <div className="flex items-center gap-6">
                         {settings.socialYoutube && (
