@@ -8,10 +8,10 @@ import { db } from "@/lib/firebase";
 import { ref, onValue } from "firebase/database";
 
 const navLinks = [
-    { name: "Services", href: "#services" },
-    { name: "Pricing", href: "#pricing" },
-    { name: "Work", href: "#work" },
-    { name: "About", href: "#about" },
+    { name: "Services", href: "/#services" },
+    { name: "Pricing", href: "/#pricing" },
+    { name: "Work", href: "/#work" },
+    { name: "About", href: "/#about" },
     { name: "Admin", href: "/admin/login" },
 ];
 
@@ -62,7 +62,7 @@ export default function Navbar() {
                         </Link>
                     ))}
                     <Link
-                        href="#contact"
+                        href="/#contact"
                         className="px-6 py-2.5 rounded-full bg-white text-black font-medium text-sm hover:bg-gray-200 transition-colors"
                     >
                         Let's Chat
@@ -99,7 +99,7 @@ export default function Navbar() {
                                 </Link>
                             ))}
                             <Link
-                                href="#contact"
+                                href="/#contact"
                                 onClick={() => setIsMobileMenuOpen(false)}
                                 className="px-8 py-3 rounded-full bg-white text-black font-medium hover:bg-gray-200 transition-colors"
                             >
