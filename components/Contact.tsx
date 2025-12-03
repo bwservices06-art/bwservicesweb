@@ -89,7 +89,7 @@ export default function Contact() {
                                 </div>
                                 <div>
                                     <p className="text-sm text-foreground/40">Email</p>
-                                    <p className="font-medium">{settings.contactEmail || "hello@bwservices.dev"}</p>
+                                    <p className="font-medium">{settings.contactEmail || "bwservices06@gmail.com"}</p>
                                 </div>
                             </div>
 
@@ -99,7 +99,7 @@ export default function Contact() {
                                 </div>
                                 <div>
                                     <p className="text-sm text-foreground/40">Phone</p>
-                                    <p className="font-medium">{settings.contactPhone || "+1 (555) 123-4567"}</p>
+                                    <p className="font-medium">{settings.contactPhone || "+91 9529811731"}</p>
                                 </div>
                             </div>
 
